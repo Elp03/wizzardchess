@@ -100,37 +100,37 @@ fn MakeArrayWithPieces_white(pice_colour: Colour){
 fn MakeArrayWithPieces_black(pice_colour: Colour){
 	
 	// Pawns 
-	let mut black_pieces = WHITE_PIECES.lock().unwrap();
+	let mut black_pieces = BLACK_PIECES.lock().unwrap();
 
 	for i in (0..8){ 
 		black_pieces[i] = Some(Pice{ 
-				colour: pice_colour.clone() ,type_pice: BoardPieces::Pawn,posision: PosistionHolder{rank: Rank::Two, file: matchnumber(i.try_into().unwrap())}	});
+				colour: pice_colour.clone() ,type_pice: BoardPieces::Pawn, posision: PosistionHolder{rank: Rank::Seven, file: matchnumber(i.try_into().unwrap())}	});
 	}
 
 	// Rook left
 	black_pieces[8] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: Rank::One, file: File::A}, });
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: Rank::Eight, file: File::A}, });
 	// Rook right
 	black_pieces[9] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: Rank::One, file: File::H}, }); 
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: Rank::Eight, file: File::H}, }); 
 	// Bishop Left
 	black_pieces[10] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank: Rank::One, file: File::C}, }); 
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank: Rank::Eight, file: File::C}, }); 
 	// Bishop right
 	black_pieces[11] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank: Rank::One, file: File::F}, });
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank: Rank::Eight, file: File::F}, });
 	// Knight right
 	black_pieces[12] = Some(Pice{
-		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank: Rank::One, file: File::B}, });
+		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank: Rank::Eight, file: File::B}, });
 	// Knight left
 	black_pieces[13] = Some(Pice{
-		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank: Rank::One, file: File::G}, });
+		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank: Rank::Eight, file: File::G}, });
 	// Queen
 	black_pieces[14] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Queen,		posision: PosistionHolder{rank: Rank::One, file: File::D}, });
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Queen,		posision: PosistionHolder{rank: Rank::Eight, file: File::D}, });
 	// King 
 	black_pieces[15] = Some(Pice{ 
-		colour: pice_colour.clone(),		type_pice: BoardPieces::King,		posision: PosistionHolder{rank: Rank::One, file: File::E}, });
+		colour: pice_colour.clone(),		type_pice: BoardPieces::King,		posision: PosistionHolder{rank: Rank::Eight, file: File::E}, });
 }
 
 fn main() {
@@ -142,8 +142,8 @@ fn main() {
     esp_idf_svc::log::EspLogger::initialize_default();
 
     log::info!("Hello, world!");
+
 	MakeArrayWithPieces_white(Colour::White);
-	MakeArrayWithPieces_black(Colour::Black);
 	let white_pieces = WHITE_PIECES.lock().unwrap();
 
     // Print the values stored in WHITE_PIECES
@@ -155,9 +155,11 @@ fn main() {
         }
     }
 
+	
+	MakeArrayWithPieces_black(Colour::Black);
 	let black_pieces = BLACK_PIECES.lock().unwrap();
 
-    // Print the values stored in WHITE_PIECES
+    // Print the values stored in BLACK_PIECES
     for (index, piece) in black_pieces.iter().enumerate() {
         if let Some(piece) = piece {
             println!("Index {}: {:?}", index, piece);
@@ -165,6 +167,5 @@ fn main() {
             println!("Index {}: None", index);
         }
     }
-
 
 }
