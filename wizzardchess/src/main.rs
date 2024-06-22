@@ -17,7 +17,7 @@ enum BoardPieces {
 enum File {
 	A, B, C, D, E, F, G, H,
 }
-#[derive(Debug)] 
+#[derive(Debug, Clone)] 
 enum Rank{
 	One, Two, Three, Four, Five, Six, Seven, Eight, 
 }
@@ -28,7 +28,7 @@ struct PosistionHolder {
 	file: File, 
 }
 
-#[derive(Clone, Debug)] 
+#[derive(Clone, Debug, PartialEq)] 
 enum Colour{
 	Black,	White
 }
@@ -64,39 +64,53 @@ fn matchnumber(num: u32) -> File {
 
 // array with pieces, color and placement and if alive or not,
 fn MakeArrayWithPieces(pice_colour: Colour, mut array: MutexGuard<[Option<Pice>;16]>){
+	let pawn_rank: Rank;
+	let rest_pieces: Rank;
+
+	if pice_colour == Colour::White{
+		pawn_rank = Rank::Two;
+		rest_pieces = Rank::One; 
+	} else if pice_colour == Colour::Black{
+		pawn_rank = Rank::Seven;
+		rest_pieces = Rank::Eight;
+	}else {
+		pawn_rank = Rank::Five;
+		rest_pieces = Rank::Four;
+	}
+
 
 	// Pawns 
 	let array_pieces: &mut [Option<Pice>; 16] = array.deref_mut();
 
 	for i in (0..8){ 
 		array_pieces[i] = Some(Pice{ 
-				colour: pice_colour.clone() ,type_pice: BoardPieces::Pawn, posision: PosistionHolder{rank: Rank::Seven, file: matchnumber(i.try_into().unwrap())}	});
+				colour: pice_colour.clone() ,type_pice: BoardPieces::Pawn, posision: PosistionHolder{rank: pawn_rank.clone(), file: matchnumber(i.try_into().unwrap())}	});
 	}
 
 	// Rook left
 	array_pieces[8] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: Rank::Eight, file: File::A}, });
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: rest_pieces.clone(), file: File::A}, });
 	// Rook right
 	array_pieces[9] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: Rank::Eight, file: File::H}, }); 
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Rook,		posision: PosistionHolder{rank: rest_pieces.clone(), file: File::H}, }); 
 	// Bishop Left
 	array_pieces[10] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank: Rank::Eight, file: File::C}, }); 
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank:  rest_pieces.clone(), file: File::C}, }); 
 	// Bishop right
 	array_pieces[11] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank: Rank::Eight, file: File::F}, });
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Bishop,		posision: PosistionHolder{rank:  rest_pieces.clone(), file: File::F}, });
 	// Knight right
 	array_pieces[12] = Some(Pice{
-		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank: Rank::Eight, file: File::B}, });
+		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank:  rest_pieces.clone(), file: File::B}, });
 	// Knight left
 	array_pieces[13] = Some(Pice{
-		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank: Rank::Eight, file: File::G}, });
+		colour: pice_colour.clone(),		type_pice: BoardPieces::Knight,		posision: PosistionHolder{rank:  rest_pieces.clone(), file: File::G}, });
 	// Queen
 	array_pieces[14] = Some(Pice{
-		colour: pice_colour.clone(), 		type_pice: BoardPieces::Queen,		posision: PosistionHolder{rank: Rank::Eight, file: File::D}, });
+		colour: pice_colour.clone(), 		type_pice: BoardPieces::Queen,		posision: PosistionHolder{rank:  rest_pieces.clone(), file: File::D}, });
 	// King 
 	array_pieces[15] = Some(Pice{ 
-		colour: pice_colour.clone(),		type_pice: BoardPieces::King,		posision: PosistionHolder{rank: Rank::Eight, file: File::E}, });
+		colour: pice_colour.clone(),		type_pice: BoardPieces::King,		posision: PosistionHolder{rank:  rest_pieces.clone(), file: File::E}, });
 }
 
 // move the posision of a piece from a place to another
